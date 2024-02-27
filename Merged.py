@@ -39,3 +39,19 @@ df_travel_times_outbound.to_excel('modified_travel_times_outbound_corrected.xlsx
 
 # Convert sections to DataFrame for export
 sections_df = pd.DataFrame(sections, columns=['Pattern'] + list(range(1, len(sections[0]))))
+
+# Seperate each Service IDs
+
+# Split Start times and End times into seperate columns
+
+# Loop through all the different combination of stops, list running times between stops based on start time. 
+
+# Build back patterns so that the combination above are listed for each stop. If the start time and end time of one stop 
+# covers the entire period of a number, duplicate so that you have even splits across all stop patterns. 
+
+# For each pattern, if the timeband above it is equal to the one below, merge them so you take the start time from the 
+# first row and end time from the second row. 
+
+# Merge back the start and end times to match input format
+
+# Loop through service IDs
