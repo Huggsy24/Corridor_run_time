@@ -31,6 +31,9 @@ for index, row in df_travel_times_outbound.iterrows():
                 additional_cols = required_columns - current_columns
                 for i in range(additional_cols):
                     df_travel_times_outbound[f'Unnamed: {current_columns + i}'] = None
+            # Insert "Stop ID:" in the cell underneath "Pattern:"
+            pattern_index = row.name
+            df_travel_times_outbound.at[pattern_index + 1, df_travel_times_outbound.columns[0]] = "Stop ID:"
             for stop_index, stop_number in enumerate(stop_numbers, start=1):
                 df_travel_times_outbound.at[index + 1, df_travel_times_outbound.columns[stop_index]] = stop_number
 
