@@ -4,19 +4,30 @@ import pandas as pd
 def group_service_blocks_by_id(df):
     grouped_blocks = {}
     current_service_id = None
+    start_index = None  # Initialize start_index outside of the loop
+    
     for i, row in df.iterrows():
-        # Check for 'Service ID:' label
         if row['Unnamed: 0'] == 'Service ID:':
             current_service_id = row['Unnamed: 1']
             if current_service_id not in grouped_blocks:
                 grouped_blocks[current_service_id] = []
-        # Identify the start of a new block within the same service ID
+            start_index = None  # Reset start_index whenever a new service ID is encountered
+
         elif pd.notnull(row['Unnamed: 0']) and current_service_id:
-            if 'start_index' not in locals() or start_index < i - 1:
+            if start_index is None:  # A new block starts when start_index is None
                 start_index = i
             end_index = i
-            # Add the block to the current service ID
-            grouped_blocks[current_service_id].append({'start_index': start_index, 'end_index': end_index})
+            
+            # Check if we have reached the end of a block
+            if i < len(df) - 1 and pd.isnull(df.iloc[i + 1]['Unnamed: 0']):
+                # Add the block to the current service ID and reset start_index
+                grouped_blocks[current_service_id].append({'start_index': start_index, 'end_index': end_index})
+                start_index = None  # Important to reset start_index for the next block
+
+    # Make sure to add the last block if the DataFrame ends with a block
+    if start_index is not None:
+        grouped_blocks[current_service_id].append({'start_index': start_index, 'end_index': end_index})
+
     return grouped_blocks
 
 # Function to save grouped blocks to Excel, one file per service ID
